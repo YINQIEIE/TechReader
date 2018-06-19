@@ -7,7 +7,7 @@ android {
     compileSdkVersion 26
     buildToolsVersion '26.0.2'
     defaultConfig {
-        applicationId "com.yq.yunmusic"
+        applicationId "com.yq.eie"
         minSdkVersion 16
         targetSdkVersion 22
         versionCode 1

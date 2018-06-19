@@ -26,6 +26,7 @@ import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.umeng.socialize.UMShareAPI;
 import com.yq.eie.R;
 import com.yq.eie.base.BaseActivity;
 import com.yq.eie.http.response.AppDatabase;
@@ -350,6 +351,7 @@ public class WebViewActivity extends BaseActivity {
         Snackbar snackbar = Snackbar.make(findViewById(R.id.root), "收藏成功", 1500)
                 .setAction("添加标签", v -> {
                     toast("添加标签");
+                    startNewActivity(TagActivity.class);
                 });
         snackbar.setActionTextColor(Color.WHITE);
         ViewGroup.LayoutParams vL = snackbar.getView().getLayoutParams();
@@ -432,5 +434,11 @@ public class WebViewActivity extends BaseActivity {
     protected void setFinishTransaction() {
         //从底部退出
         overridePendingTransition(0, R.anim.activity_bottom_out);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
     }
 }

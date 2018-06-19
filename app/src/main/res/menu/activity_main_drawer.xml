@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_homepage"
+        android:icon="@mipmap/ic_nav_homepage"
+        android:title="项目主页" />
+
+    <item
+        android:id="@+id/nav_scan_download"
+        android:icon="@mipmap/ic_nav_scan"
+        android:title="扫码下载" />
+
+    <item
+        android:id="@+id/nav_about_yueyun"
+        android:icon="@mipmap/ic_nav_about"
+        android:title="关于悦云" />
+
+    <item
+        android:id="@+id/nav_github_login"
+        android:icon="@mipmap/ic_nav_login"
+        android:title="登录GitHub账号" />
+
+    <item
+        android:id="@+id/exit"
+        android:icon="@mipmap/ic_nav_exit"
+        android:title="退出应用" />
+
+</menu>

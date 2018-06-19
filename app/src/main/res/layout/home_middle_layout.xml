@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="10dp"
+    android:gravity="center"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/tv_xiandu"
+        style="@style/StyleHomeSingleItem"
+        android:drawableTop="@drawable/home_middle_fm"
+        android:text="干货闲读" />
+
+    <FrameLayout
+        android:id="@+id/fl_everyday"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:foregroundGravity="center">
+
+        <TextView
+            android:id="@+id/tv_date"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:gravity="center"
+            android:text="XX"
+            android:textColor="@color/select_gank_day"
+            android:textSize="18sp" />
+
+        <TextView
+            style="@style/StyleHomeSingleItem"
+            android:layout_width="match_parent"
+            android:drawableTop="@drawable/home_middle_day"
+            android:text="每日干货推荐" />
+
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/tv_movie"
+        style="@style/StyleHomeSingleItem"
+        android:drawableTop="@drawable/home_middle_rank"
+        android:text="新电影热映榜" />
+
+
+</LinearLayout>

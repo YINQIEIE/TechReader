@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape>
+            <corners
+                android:bottomLeftRadius="25dp"
+                android:topLeftRadius="25dp" />
+            <!-- 边框颜色 -->
+            <solid android:color="#dedede" />
+        </shape>
+    </item>
+
+    <item
+        android:bottom="1dp"
+        android:left="1dp"
+        android:top="1dp">
+
+        <selector>
+            <item android:state_selected="true">
+                <!--选中状态-->
+                <shape>
+                    <corners
+                        android:bottomLeftRadius="25dp"
+                        android:topLeftRadius="25dp" />
+                    <solid android:color="#ffff00" />
+                </shape>
+            </item>
+
+            <!--默认状态-->
+            <item>
+                <shape>
+                    <corners
+                        android:bottomLeftRadius="25dp"
+                        android:topLeftRadius="25dp" />
+                    <solid android:color="#FFFFFF" />
+                </shape>
+            </item>
+
+        </selector>
+
+    </item>
+
+</layer-list>

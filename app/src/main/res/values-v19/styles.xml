@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--为了保证 19 以上状态栏透明,设置以后布局会顶入状态栏， 21 以上可以直接设置 statusBarColor-->
+    <style name="MyTheme.TranslucentStatusBar" parent="AppTheme.NoActionBar">
+        <item name="android:windowTranslucentStatus">true</item>
+    </style>
+
+</resources>

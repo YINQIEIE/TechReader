@@ -1,4 +1,4 @@
-package com.yq.eie.http.response;
+package com.yq.eie.db.room;
 
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;

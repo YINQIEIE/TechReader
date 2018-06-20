@@ -1,9 +1,10 @@
-package com.yq.eie.http.response;
+package com.yq.eie.db.room;
 
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
+import android.arch.persistence.room.Update;
 
 import java.util.List;
 
@@ -14,7 +15,7 @@ import io.reactivex.Single;
 public abstract class BlogDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    public abstract long insertSingleBlog(BlogBean bean);
+    public abstract long insertSingleBlog(BlogEntity bean);
 
     /**
      * 编译报错；
@@ -28,10 +29,10 @@ public abstract class BlogDao {
      */
 
     @Query("SELECT * FROM blog")
-    public abstract Flowable<List<BlogBean>> findAll();
+    public abstract Flowable<List<BlogEntity>> findAll();
 
     @Query("SELECT * FROM blog")
-    public abstract List<BlogBean> getAllBlogs();
+    public abstract List<BlogEntity> getAllBlogs();
 
     /**
      * Single 在数据库中有用户时触发 onSuccess，没有触发 onError
@@ -40,9 +41,11 @@ public abstract class BlogDao {
      * @return 已收藏博客信息
      */
     @Query("SELECT * FROM blog WHERE _id = :id")
-    public abstract Single<BlogBean> queryBlogById(String id);
+    public abstract Single<BlogEntity> queryBlogById(String id);
 
     @Query("delete FROM blog WHERE _id = :id")
     public abstract int deleteBlogById(String id);
 
+    @Update
+    public abstract int updateTag(BlogEntity blogEntity);
 }

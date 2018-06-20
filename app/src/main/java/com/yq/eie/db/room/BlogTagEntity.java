@@ -1,18 +1,24 @@
-package com.yq.eie.http.response;
+package com.yq.eie.db.room;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 
-import java.io.Serializable;
+import io.reactivex.annotations.NonNull;
 
 @Entity(tableName = "blog_tag")
-public class BlogTag implements Serializable {
+public class BlogTagEntity {
 
-    private static final long serialVersionUID = 3447392702792292134L;
-
-    @PrimaryKey
+    @NonNull
+    @PrimaryKey(autoGenerate = true)
     private int id;
     private String tagName;
+
+    public BlogTagEntity() {
+    }
+
+    public BlogTagEntity(String tagName) {
+        this.tagName = tagName;
+    }
 
     public int getId() {
         return id;

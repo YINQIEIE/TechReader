@@ -1,4 +1,4 @@
-package com.yq.eie.http.response;
+package com.yq.eie.db.room;
 
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
@@ -14,7 +14,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Date;
 
-@Database(entities = {BlogBean.class, BlogTag.class}, version = 1)
+@Database(entities = {BlogEntity.class, BlogTagEntity.class}, version = 1)
 @TypeConverters({TimeConverters.class, JsonConverters.class})
 public abstract class AppDatabase extends RoomDatabase {
 

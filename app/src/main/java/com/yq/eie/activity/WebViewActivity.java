@@ -29,9 +29,11 @@ import android.widget.TextView;
 import com.umeng.socialize.UMShareAPI;
 import com.yq.eie.R;
 import com.yq.eie.base.BaseActivity;
-import com.yq.eie.http.response.AppDatabase;
-import com.yq.eie.http.response.BlogBean;
-import com.yq.eie.http.response.BlogDao;
+import com.yq.eie.db.room.AppDatabase;
+import com.yq.eie.db.room.BlogDao;
+import com.yq.eie.db.room.BlogEntity;
+import com.yq.eie.db.room.BlogTagDao;
+import com.yq.eie.db.room.BlogTagEntity;
 import com.yq.eie.http.response.GankBean;
 
 import java.lang.reflect.Method;
@@ -43,7 +45,11 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 
+import static com.yq.eie.activity.TagActivity.KEY_TAG;
+
 public class WebViewActivity extends BaseActivity {
+
+    public static final int REQUEST_CODE_TAG = 0x1001;
 
     @BindView(R.id.progressBar)
     ProgressBar progressBar;
@@ -54,10 +60,13 @@ public class WebViewActivity extends BaseActivity {
     private WebView webView;
     private String webUrl;
     boolean hasLoaded = false;
-    private GankBean.ResultBean info;
-    private CompositeDisposable mDisposable = new CompositeDisposable();
-    private BlogDao blogDao;
+    private GankBean.ResultBean info;//传递过来的信息
+    private BlogEntity blogBean;//封装的数据库对象
+    private BlogDao blogDao;//数据库查询对象
     private boolean isCollected;
+    private Snackbar snackbar;
+    //管理 disposable
+    private CompositeDisposable mDisposable = new CompositeDisposable();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -65,26 +74,29 @@ public class WebViewActivity extends BaseActivity {
         //从底部进入
         overridePendingTransition(R.anim.activity_bottom_in, R.anim.activity_bottom_no);
         initToolbar();
+        initDbData();
         initWebView();
-    }
-
-    private void initToolbar() {
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("加载中...");
-        setSupportActionBar(toolbar);
-//        getSupportActionBar().setHomeAsUpIndicator(R.mipmap.actionbar_back);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
     }
 
     @Override
     protected int getLayoutResId() {
         return R.layout.activity_web_view;
+    }
+
+    private void initToolbar() {
+        toolbar.setTitle("加载中...");
+        setSupportActionBar(toolbar);
+//        getSupportActionBar().setHomeAsUpIndicator(R.mipmap.actionbar_back);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationOnClickListener(v -> finish());
+    }
+
+    private void initDbData() {
+        info = (GankBean.ResultBean) getIntent().getExtras().get("info");
+        log(info.toString());
+        blogBean = new BlogEntity(info);
+        blogDao = AppDatabase.getInstance(WebViewActivity.this).getBlogDao();
+        isCollected();
     }
 
     private void initWebView() {
@@ -157,13 +169,8 @@ public class WebViewActivity extends BaseActivity {
         //排版适应屏幕
         webSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NARROW_COLUMNS);
         webView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
-        info = (GankBean.ResultBean) getIntent().getExtras().get("info");
-        log(info.toString());
         webView.loadUrl(webUrl = info.getUrl());
-        log("from intent" + webUrl);
         parent.addView(webView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        blogDao = AppDatabase.getInstance(WebViewActivity.this).getBlogDao();
-        isCollected();
     }
 
     @Override
@@ -234,7 +241,6 @@ public class WebViewActivity extends BaseActivity {
 //        }
 //        if (dbManager.addBlog(webUrl))
 //            toast("收藏成功");
-        final BlogBean blogBean = new BlogBean(info);
         //第一种方法
 //        Completable completable = Completable.fromAction(() ->
 //                blogDao.insertSingleBlog(blogBean)
@@ -257,7 +263,7 @@ public class WebViewActivity extends BaseActivity {
         //第三种方法 由于插入方法中返回值类型不确定，不能将返回值设置为 Flowable<Long>
         //所以，在这几种方法中这是最科学的方法了
         if (!isCollected) {
-            addBlogToCollection(blogBean);
+            addBlogToCollection();
         } else
             deleteFromCollection();
         //第四种方法 不用 rxjava
@@ -285,7 +291,7 @@ public class WebViewActivity extends BaseActivity {
      *
      * @return true 已收藏过
      */
-    private boolean isCollected() {
+    private void isCollected() {
         mDisposable.add(blogDao.queryBlogById(info.get_id())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -293,15 +299,12 @@ public class WebViewActivity extends BaseActivity {
                         throwable -> isCollected = false
                 )
         );
-        return isCollected;
     }
 
     /**
      * 插入数据方法
-     *
-     * @param blogBean 收藏的 blog 对象
      */
-    private void addBlogToCollection(BlogBean blogBean) {
+    private void addBlogToCollection() {
         mDisposable.add(Observable.create((ObservableOnSubscribe<Long>) e ->
                 e.onNext(blogDao.insertSingleBlog(blogBean))
         )
@@ -330,6 +333,7 @@ public class WebViewActivity extends BaseActivity {
      * 收藏失败
      */
     private void onCollectFailed(Throwable throwable) {
+        log(throwable.getMessage());
         toast("收藏失败");
         isCollected = false;
     }
@@ -341,6 +345,7 @@ public class WebViewActivity extends BaseActivity {
      */
     private void onCollectSuccess(Long id) {
         if (id > 0) {
+            blogBean.setId(id.intValue());
             showSnackBar();
             getAllBlogs();
             isCollected = true;
@@ -348,18 +353,33 @@ public class WebViewActivity extends BaseActivity {
     }
 
     private void showSnackBar() {
-        Snackbar snackbar = Snackbar.make(findViewById(R.id.root), "收藏成功", 1500)
-                .setAction("添加标签", v -> {
-                    toast("添加标签");
-                    startNewActivity(TagActivity.class);
-                });
-        snackbar.setActionTextColor(Color.WHITE);
-        ViewGroup.LayoutParams vL = snackbar.getView().getLayoutParams();
-        CoordinatorLayout.LayoutParams newLayoutParams = new CoordinatorLayout.LayoutParams(-1, vL.height);
-        newLayoutParams.gravity = Gravity.BOTTOM;
-        snackbar.getView().setLayoutParams(newLayoutParams);
-        ((TextView) snackbar.getView().findViewById(R.id.snackbar_text)).setTextColor(Color.WHITE);
+        if (null == snackbar)
+            initSnackBar();
         snackbar.show();
+    }
+
+    /**
+     * 初始化 SnackBar
+     */
+    private void initSnackBar() {
+        snackbar = Snackbar.make(findViewById(R.id.root), "已收藏", 1500)
+                .setAction("添加标签", v -> startTagActivity())
+                //设置添加标签字体颜色
+                .setActionTextColor(getResources().getColor(R.color.green_tag));
+        View snackBarLayout = snackbar.getView();
+        ViewGroup.LayoutParams vL = snackBarLayout.getLayoutParams();
+        CoordinatorLayout.LayoutParams newLayoutParams = new CoordinatorLayout.LayoutParams(-1, vL.height);
+        //底部弹出，否则重新设置 layoutParams 会在顶部弹出
+        newLayoutParams.gravity = Gravity.BOTTOM;
+        //重新设置 layoutParams ，否则在平板上横向不会占满屏幕
+        snackBarLayout.setLayoutParams(newLayoutParams);
+        //设置 "已收藏" 为白色
+        ((TextView) snackBarLayout.findViewById(R.id.snackbar_text)).setTextColor(Color.WHITE);
+    }
+
+    private void startTagActivity() {
+        Intent tagIntent = new Intent(WebViewActivity.this, TagActivity.class);
+        startActivityForResult(tagIntent, REQUEST_CODE_TAG);
     }
 
     /**
@@ -375,9 +395,11 @@ public class WebViewActivity extends BaseActivity {
     protected void onDestroy() {
 //        clearCookies();
         super.onDestroy();
+        parent.removeAllViews();
         webView.destroy();
         //mDisposable.clear()也可以
         mDisposable.dispose();
+        AppDatabase.getInstance(this).getOpenHelper().close();
     }
 
     /**
@@ -439,6 +461,30 @@ public class WebViewActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
+        if (resultCode != RESULT_OK) return;
+        if (requestCode == REQUEST_CODE_TAG) {
+            String tag = data.getStringExtra(KEY_TAG);
+            blogBean.setTag(tag);
+            updateBlogTag();
+        } else
+            UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
     }
+
+    /**
+     * 更新收藏标签
+     */
+    private void updateBlogTag() {
+        BlogTagDao tagDao = AppDatabase.getInstance(WebViewActivity.this).getTagDao();
+        mDisposable.add(Observable.create((ObservableOnSubscribe<Integer>) e ->
+                        e.onNext(blogDao.updateTag(blogBean))
+                ).subscribeOn(Schedulers.io())
+//                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(line -> {
+                            log(Thread.currentThread().getName());
+                            tagDao.insertTag(new BlogTagEntity(blogBean.getTag()));
+//                            mDisposable.add(Observable.fromIterable(tagDao.findAll()).subscribe(tag -> log(tag.getTagName())));
+                        }, e -> log(e.getMessage()))
+        );
+    }
+
 }

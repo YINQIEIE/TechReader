@@ -75,5 +75,6 @@
     <!--dialog的查看详情键-->
     <color name="colorBtDialog">#38659C</color>
 
+    <color name="green_tag">#FF53BE53</color>
 
 </resources>

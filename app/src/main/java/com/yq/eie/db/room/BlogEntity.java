@@ -1,15 +1,17 @@
-package com.yq.eie.http.response;
+package com.yq.eie.db.room;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
+import com.yq.eie.http.response.GankBean;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Entity(tableName = "blog", indices = {@Index(value = {"_id"}, unique = true)})
-public class BlogBean extends GankBean.ResultBean {
+public class BlogEntity extends GankBean.ResultBean {
 
     @NonNull
     @PrimaryKey(autoGenerate = true)
@@ -17,21 +19,21 @@ public class BlogBean extends GankBean.ResultBean {
     private String tag;//标签
     private Date collect_time;//时间
 
-    public BlogBean() {
+    public BlogEntity() {
     }
 
-    public BlogBean(GankBean.ResultBean bean) {
-        this._id = bean._id;
-        this.name = bean.name;
-        this.createdAt = bean.createdAt;
-        this.desc = bean.desc;
-        this.publishedAt = bean.publishedAt;
-        this.type = bean.type;
-        this.url = bean.url;
-        this.used = bean.used;
-        this.who = bean.who;
-        this.images = bean.images;
-        this.imageUrl = bean.imageUrl;
+    public BlogEntity(GankBean.ResultBean bean) {
+        this._id = bean.get_id();
+        this.name = bean.getName();
+        this.createdAt = bean.getCreatedAt();
+        this.desc = bean.getDesc();
+        this.publishedAt = bean.getPublishedAt();
+        this.type = bean.getType();
+        this.url = bean.getUrl();
+        this.used = bean.isUsed();
+        this.who = bean.getWho();
+        this.images = bean.getImages();
+        this.imageUrl = bean.getImageUrl();
     }
 
     public int getId() {

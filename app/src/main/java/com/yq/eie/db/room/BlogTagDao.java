@@ -6,12 +6,17 @@ import android.arch.persistence.room.Query;
 
 import java.util.List;
 
+import io.reactivex.Maybe;
+
 @Dao
-public abstract class BlogTagDao {
+public interface BlogTagDao {
 
     @Insert
-    public abstract void insertTag(BlogTagEntity blogTag);
+    void insertTag(BlogTagEntity blogTag);
 
-    @Query("select * from blog_Tag")
-    public abstract List<BlogTagEntity> findAll();
+    @Query("SELECT * FROM blog_Tag ORDER BY tagName ASC")
+    List<BlogTagEntity> findAll();
+
+    @Query("SELECT * FROM blog_tag WHERE tagName LIKE :name")
+    Maybe<List<BlogTagEntity>> findTagsByName(String name);
 }

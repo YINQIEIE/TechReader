@@ -55,27 +55,42 @@
             android:layout_gravity="center_vertical"
             android:layout_margin="6dp"
             android:background="@drawable/bg_add_tag"
+            android:gravity="center"
             android:hint="添加标签"
+            android:minWidth="60dp"
             android:paddingBottom="4dp"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
             android:paddingTop="4dp"
             android:textColor="@android:color/black"
-            android:textSize="12sp" />
+            android:textSize="14sp" />
 
     </FrameLayout>
 
-    <ScrollView
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#eee">
+        android:layout_height="match_parent">
 
-        <com.zhy.view.flowlayout.TagFlowLayout
-            android:id="@+id/flowlayout"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:padding="20dp"
-            zhy:max_select="-1" />
-    </ScrollView>
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#eee">
+
+            <com.zhy.view.flowlayout.TagFlowLayout
+                android:id="@+id/flowlayout"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:padding="20dp"
+                zhy:max_select="1" />
+        </ScrollView>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_tags"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#eee"
+            android:visibility="gone" />
+
+    </FrameLayout>
 
 </LinearLayout>

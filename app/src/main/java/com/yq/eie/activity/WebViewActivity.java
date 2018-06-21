@@ -294,7 +294,6 @@ public class WebViewActivity extends BaseActivity {
     private void isCollected() {
         mDisposable.add(blogDao.queryBlogById(info.get_id())
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(blog -> isCollected = true,
                         throwable -> isCollected = false
                 )
@@ -305,9 +304,10 @@ public class WebViewActivity extends BaseActivity {
      * 插入数据方法
      */
     private void addBlogToCollection() {
-        mDisposable.add(Observable.create((ObservableOnSubscribe<Long>) e ->
-                e.onNext(blogDao.insertSingleBlog(blogBean))
-        )
+        mDisposable.add(Observable.create((ObservableOnSubscribe<Long>) e -> {
+            e.onNext(blogDao.insertSingleBlog(blogBean));
+            e.onComplete();
+        })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onCollectSuccess, this::onCollectFailed));
@@ -317,13 +317,15 @@ public class WebViewActivity extends BaseActivity {
      * 删除已经收藏的 blog
      */
     private void deleteFromCollection() {
-        mDisposable.add(Observable.create((ObservableOnSubscribe<Integer>) e ->
-                e.onNext(blogDao.deleteBlogById(info.get_id())))
+        mDisposable.add(Observable.create((ObservableOnSubscribe<Integer>) e -> {
+            e.onNext(blogDao.deleteBlogById(info.get_id()));
+            e.onComplete();
+        })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> {
                     if (result > 0) {
-                        toast("取消收藏成功~");
+                        toast("已取消收藏");
                         isCollected = false;
                     }
                 }));
@@ -399,7 +401,7 @@ public class WebViewActivity extends BaseActivity {
         webView.destroy();
         //mDisposable.clear()也可以
         mDisposable.dispose();
-        AppDatabase.getInstance(this).getOpenHelper().close();
+//        AppDatabase.getInstance(this).getOpenHelper().close();
     }
 
     /**
@@ -478,11 +480,10 @@ public class WebViewActivity extends BaseActivity {
         mDisposable.add(Observable.create((ObservableOnSubscribe<Integer>) e ->
                         e.onNext(blogDao.updateTag(blogBean))
                 ).subscribeOn(Schedulers.io())
-//                        .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(line -> {
                             log(Thread.currentThread().getName());
                             tagDao.insertTag(new BlogTagEntity(blogBean.getTag()));
-//                            mDisposable.add(Observable.fromIterable(tagDao.findAll()).subscribe(tag -> log(tag.getTagName())));
+                            mDisposable.add(Observable.fromIterable(tagDao.findAll()).subscribe(tag -> log(tag)));
                         }, e -> log(e.getMessage()))
         );
     }

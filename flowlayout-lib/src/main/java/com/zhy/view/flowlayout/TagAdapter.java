@@ -13,7 +13,6 @@ import java.util.Set;
 public abstract class TagAdapter<T> {
     private List<T> mTagDatas;
     private OnDataChangedListener mOnDataChangedListener;
-    @Deprecated
     private HashSet<Integer> mCheckedPosList = new HashSet<Integer>();
 
     public TagAdapter(List<T> datas) {
@@ -51,8 +50,7 @@ public abstract class TagAdapter<T> {
         notifyDataChanged();
     }
 
-    @Deprecated
-    HashSet<Integer> getPreCheckedList() {
+    public HashSet<Integer> getPreCheckedList() {
         return mCheckedPosList;
     }
 
@@ -73,12 +71,12 @@ public abstract class TagAdapter<T> {
     public abstract View getView(FlowLayout parent, int position, T t);
 
 
-    public void onSelected(int position, View view){
-        Log.d("zhy","onSelected " + position);
+    public void onSelected(int position, View view) {
+        Log.d("zhy", "onSelected " + position);
     }
 
-    public void unSelected(int position, View view){
-        Log.d("zhy","unSelected " + position);
+    public void unSelected(int position, View view) {
+        Log.d("zhy", "unSelected " + position);
     }
 
     public boolean setSelected(int position, T t) {

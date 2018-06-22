@@ -128,7 +128,10 @@ public class TagActivity extends BaseActivity {
         rvAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-                changeTag(tagList.get(position).getTagName());
+                String tag = searchTagList.get(position).toString();
+                changeTag(tag);
+                mFlowLayout.onChanged();
+                mFlowLayout.getAdapter().setSelectedList(findTagPosition(tag));
                 rvTags.setVisibility(View.GONE);
             }
 
@@ -141,14 +144,22 @@ public class TagActivity extends BaseActivity {
         colorSpan = new ForegroundColorSpan(getResources().getColor(R.color.green_tag));
     }
 
+    private int findTagPosition(String tag) {
+        for (int i = 0; i < tagList.size(); i++) {
+            if (tag.equals(tagList.get(i).getTagName()))
+                return i;
+        }
+        return 0;
+    }
+
     @OnTextChanged(value = R.id.et_tag, callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
     void textChangeMonitor(Editable s) {
         if (isChooseMode) {
-            mFlowLayout.onChanged();
             isChooseMode = false;
             return;
         }
         if (TextUtils.isEmpty(s)) {
+            mFlowLayout.getAdapter().getPreCheckedList().clear();
             mFlowLayout.onChanged();
             rvTags.setVisibility(View.GONE);
             return;

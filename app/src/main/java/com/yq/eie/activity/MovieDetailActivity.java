@@ -215,6 +215,7 @@ public class MovieDetailActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.toolbar_more:
+                //TODO 跳转浏览器界面报错
                 WebViewActivity.loadUrl(this, subjectsBean.getAlt(), "");
                 break;
             default:

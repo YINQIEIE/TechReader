@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
@@ -42,19 +42,24 @@
         <item name="android:textColor">@color/tabColorLocalMusic</item>
     </style>
 
+    <style name="ToolbarStyle">
+        <item name="android:id">@id/toolbar</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">?attr/actionBarSize</item>
+        <item name="android:popupTheme" tools:ignore="NewApi">@style/AppTheme.PopupOverlay</item>
+        <item name="android:theme">@style/ToolbarTheme</item>
+        <item name="android:background">@color/themeColor</item>
+    </style>
+
     <!--不设置背景，WebActivity 使用，设置背景后会影响 OptionsMenu 样式，会有一个背景色的底层，
-    而且文字区域也会显示背景色；但是不居中单独设置背景色就不存在这种情况-->
-    <style name="ToolbarStyle.NoBackColor" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+    而且文字区域也会显示背景色；但是布局中单独设置背景色就不存在这种情况-->
+    <style name="ToolbarTheme" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="actionBarItemBackground">@drawable/toolbarItemBackground</item>
         <!--会影响首页 tablayout item 背景-->
         <item name="selectableItemBackground">@drawable/toolbarItemBackground</item>
         <item name="titleTextAppearance">@style/ToolBar.Title</item>
         <item name="subtitleTextStyle">@style/Toolbar.SubTitle</item>
         <item name="android:windowNoTitle">true</item>
-    </style>
-
-    <style name="ToolbarStyle" parent="ToolbarStyle.NoBackColor">
-        <item name="android:background">@color/themeColor</item>
     </style>
 
     <!--titlebar 标题-->

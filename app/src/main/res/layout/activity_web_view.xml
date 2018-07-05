@@ -9,13 +9,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?android:attr/actionBarSize"
-            android:background="@color/themeColor"
-            android:popupTheme="@style/AppTheme.PopupOverlay"
-            android:theme="@style/ToolbarStyle.NoBackColor" />
+        <android.support.v7.widget.Toolbar style="@style/ToolbarStyle" />
 
         <ProgressBar
             android:id="@+id/progressBar"

@@ -15,6 +15,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.yq.eie.activity.CollectionActivity;
 import com.yq.eie.adapter.MyFragmentAdapter;
 import com.yq.eie.base.BaseActivity;
 import com.yq.eie.base.BaseFragment;
@@ -127,6 +128,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
         } else if (id == R.id.nav_github_login) {
 
+        } else if (id == R.id.nav_collection) {
+            startNewActivity(CollectionActivity.class);
         } else if (id == R.id.exit) {
 
         }

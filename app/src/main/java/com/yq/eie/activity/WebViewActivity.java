@@ -26,7 +26,7 @@ import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.umeng.socialize.UMShareAPI;
+//import com.umeng.socialize.UMShareAPI;
 import com.yq.eie.R;
 import com.yq.eie.base.BaseActivity;
 import com.yq.eie.db.room.AppDatabase;
@@ -468,8 +468,10 @@ public class WebViewActivity extends BaseActivity {
             String tag = data.getStringExtra(KEY_TAG);
             blogBean.setTag(tag);
             updateBlogTag();
-        } else
-            UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
+        } else{
+
+        }
+//            UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
     }
 
     /**

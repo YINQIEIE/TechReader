@@ -10,15 +10,15 @@
     <application
         android:name=".base.MyApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/app_icon"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
         <activity
             android:name=".activity.SplashActivity"
             android:theme="@style/SplashStyle">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -29,19 +29,16 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+
         <activity
             android:name=".activity.LocalMusicActivity"
             android:theme="@style/AppTheme.NoActionBar" />
 
-        <service
-            android:name=".media.MusicService"
-            android:enabled="false"
-            android:exported="false" />
-
         <activity android:name=".activity.WebViewActivity" />
 
         <activity android:name=".activity.MovieTop250Activity" />
+
         <activity
             android:name=".activity.MovieDetailActivity"
             android:theme="@style/MyTheme.TranslucentStatusBar" />
@@ -54,10 +51,20 @@
         <activity android:name=".activity.TagActivity" />
 
         <activity
-        android:name=".wxapi.WXEntryActivity"
-        android:configChanges="keyboardHidden|orientation|screenSize"
-        android:exported="true"
-        android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+            android:name=".activity.CollectionActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:parentActivityName=".MainActivity" />
+
+        <service
+            android:name=".media.MusicService"
+            android:enabled="false"
+            android:exported="false" />
+
+        <!--<activity
+            android:name=".wxapi.WXEntryActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:exported="true"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />-->
 
     </application>
 

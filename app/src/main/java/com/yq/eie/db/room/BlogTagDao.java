@@ -14,7 +14,7 @@ public interface BlogTagDao {
     @Insert
     void insertTag(BlogTagEntity blogTag);
 
-    @Query("SELECT * FROM blog_Tag ORDER BY tagName DESC")
+    @Query("SELECT * FROM blog_Tag ORDER BY tagName ASC")
     List<BlogTagEntity> findAll();
 
     @Query("SELECT * FROM blog_tag WHERE tagName LIKE :name")

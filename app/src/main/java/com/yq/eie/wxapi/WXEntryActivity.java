@@ -2,9 +2,9 @@ package com.yq.eie.wxapi;
 
 
 
-import com.umeng.socialize.weixin.view.WXCallbackActivity;
+import android.support.v7.app.AppCompatActivity;
 
-public class WXEntryActivity extends WXCallbackActivity {
+public class WXEntryActivity extends AppCompatActivity {
 
 
 

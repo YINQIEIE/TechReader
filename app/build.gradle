@@ -75,4 +75,5 @@ dependencies {
     })
     //    compile project(':umengshare')
     compile project(':flowlayout-lib')
+    compile 'com.android.support:recyclerview-v7:27.1.1'
 }

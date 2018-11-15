@@ -52,18 +52,19 @@ dependencies {
     annotationProcessor'com.jakewharton:butterknife-compiler:8.8.1'
     implementation 'com.zhy:base-rvadapter:3.0.3'
     implementation 'com.github.promeg:tinypinyin:2.0.3'
-    implementation 'com.squareup.retrofit2:retrofit:2.3.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
-    implementation 'com.squareup.okhttp3:logging-interceptor:3.6.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.11.0'
     implementation 'com.youth.banner:banner:1.4.4'
     implementation 'jp.wasabeef:glide-transformations:2.0.1'
     implementation "com.android.support:cardview-v7:${rootProject.ext.supportVersion}"
     testImplementation 'junit:junit:4.12'
+    //最新版本依赖了 androidx support 库，会导致manifest合并出错，所以指定版本
     implementation 'com.github.chrisbanes:PhotoView:2.1.4'
     // https://mvnrepository.com/artifact/com.google.code.gson/gson
     //    implementation 'com.google.code.gson:gson:2.8.2'
-    //    implementation 'io.reactivex.rxjava2:rxjava:2.0.2'
-    implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
+//        implementation 'io.reactivex.rxjava2:rxjava:2.2.0'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
     implementation("android.arch.persistence.room:rxjava2:1.1.0", {
         exclude group: 'com.android.support'
     })

@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
-import com.google.common.base.Strings;
 import com.yq.eie.R;
 import com.yq.eie.adapter.AndroidAdapter;
 import com.yq.eie.base.BaseLoadFragment;
@@ -108,7 +107,7 @@ public class GankChildFragment extends BaseLoadFragment {
         if (!isDataLoaded)
             showLoadingDialog();
         gankKind = SPUtil.getStringValByKey(getActivity(), "gank_kind");
-        gankKind = Strings.isNullOrEmpty(gankKind) ? "Android" : gankKind;
+        gankKind = TextUtils.isEmpty(gankKind) ? "Android" : gankKind;
         final Call<GankBean<List<GankBean.ResultBean>>> photoCall = RetrofitManager.getGankHttpService().getGankInfo(gankKind, page, 10);
         photoCall.enqueue(new Callback<GankBean<List<GankBean.ResultBean>>>() {
             @Override

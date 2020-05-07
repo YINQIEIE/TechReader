@@ -8,6 +8,8 @@ import com.yq.eie.BuildConfig;
 import com.yq.eie.utils.CheckNetwork;
 
 import java.io.IOException;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
@@ -42,6 +44,14 @@ public class OkHttpClientManager {
         if (client == null) {
             if (builder == null) {
                 builder = new OkHttpClient.Builder();
+            }
+            try {
+                SSLSocketFactory factory = new SSLSocketFactoryCompat();
+                builder.sslSocketFactory(factory);
+            } catch (KeyManagementException e) {
+                e.printStackTrace();
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
             }
             //okhttp日志打印
             HttpLoggingInterceptor logInterceptor = new HttpLoggingInterceptor(new OkHttpLogger());
